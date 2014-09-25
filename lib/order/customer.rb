@@ -2,11 +2,14 @@ require 'net/http'
 require 'net/https'
 require 'nokogiri'
 
+require 'order/download'
+
 module ImOrder
   class IncompleteCustomer < StandardError
   end
   class Customer
-    attr_accessor :uid
+    include DownloadList
+    attr_accessor :uid, :id, :password, :error, :warning
 
     def initialize(uid, email=nil, firstname=nil, lastname=nil, country=nil)
       @uid=uid
@@ -14,6 +17,11 @@ module ImOrder
       @firstname=firstname
       @lastname=lastname
       @country=country
+
+      @id=nil
+      @password=nil
+      @error=nil
+      @warning=nil
     end
 
     def to_params
@@ -27,7 +35,22 @@ module ImOrder
         parameters=auth.to_params
         parameters=parameters.merge(self.to_params)
 
-        client.request(parameters)
+        resp=client.request(parameters)
+
+        if resp.type=="Error"
+          @error=resp
+          false
+        else
+          if resp.type=="Warning"
+            @warning=resp
+            @id=resp.result["id"]
+            false
+          else
+            @id=resp.result["id"]
+            @password=resp.result["password"]
+            true
+          end
+        end
       else
         raise IncompleteCustomer
       end
@@ -37,7 +60,20 @@ module ImOrder
       client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/customer_download_list")
       parameters=auth.to_params
       parameters["customer_uid"]=@uid
-      client.request(parameters)
+      resp=client.request(parameters)
+      if resp.type=="Error"
+        @error=resp
+        false
+      else
+        if resp.type=="Warning"
+          @warning=resp
+          false
+        else
+          @downloads=to_downloads(resp)
+          true
+        end
+      end
+
     end
 
   end
