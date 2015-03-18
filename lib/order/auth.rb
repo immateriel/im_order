@@ -1,4 +1,5 @@
 module ImOrder
+
   class Auth
     def initialize(api_key,reseller_id=nil,reseller_gencod=nil)
       @api_key=api_key

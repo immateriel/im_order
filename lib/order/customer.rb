@@ -3,10 +3,9 @@ require 'net/https'
 require 'nokogiri'
 
 require 'order/download'
+require 'order/error'
 
 module ImOrder
-  class IncompleteCustomer < StandardError
-  end
   class Customer
     include DownloadList
     attr_accessor :uid, :id, :password, :error, :warning
@@ -38,8 +37,9 @@ module ImOrder
         resp=client.request(parameters)
 
         if resp.type=="Error"
+          ex=ImOrder.const_get(resp.code)
           @error=resp
-          false
+          raise ex, resp.message
         else
           if resp.type=="Warning"
             @warning=resp
@@ -62,8 +62,9 @@ module ImOrder
       parameters["customer_uid"]=@uid
       resp=client.request(parameters)
       if resp.type=="Error"
+        ex=ImOrder.const_get(resp.code)
         @error=resp
-        false
+        raise ex, resp.message
       else
         if resp.type=="Warning"
           @warning=resp

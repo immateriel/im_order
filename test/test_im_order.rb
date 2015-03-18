@@ -22,6 +22,22 @@ TEST_MISSING_ORDER_UID="IMORDERMISSING"
 class TestImOnix < MiniTest::Test
   i_suck_and_my_tests_are_order_dependent!
 
+  context "wrong auth" do
+    setup do
+      @auth=ImOrder::Auth.new("WRONGKEY","WRONGID",nil)
+      @customer_uid=TEST_CUSTOMER_UID
+      @order_uid=TEST_ORDER_UID
+    end
+
+    should "fail" do
+      @customer=ImOrder::Customer.new(@customer_uid,"#{@customer_uid}@testimorder.com","test","client","FR")
+      assert_raises(ImOrder::InvalidKey) do
+        @customer.push(@auth)
+      end
+    end
+
+  end
+
   context "ordering" do
     setup do
       @auth=ImOrder::Auth.new(TEST_API_KEY,TEST_RESELLER_ID,TEST_RESELLER_GENCOD)
@@ -31,9 +47,9 @@ class TestImOnix < MiniTest::Test
 
     should "missing data when create customer" do
       @customer=ImOrder::Customer.new(@customer_uid,"#{@customer_uid}@testimorder.com")
-      assert_raises(ImOrder::IncompleteCustomer) {
-        r=@customer.push(@auth)
-      }
+      assert_raises(ImOrder::IncompleteCustomer) do
+        @customer.push(@auth)
+      end
     end
 
     should "create customer" do
@@ -55,19 +71,25 @@ class TestImOnix < MiniTest::Test
 
     should "missing data when create order" do
       @order=ImOrder::Order.new(@order_uid)
-      assert_raises(ImOrder::IncompleteOrder) {
-        r=@order.push(@auth)
-      }
+      assert_raises(ImOrder::IncompleteOrder) do
+        @order.push(@auth)
+      end
     end
 
     should "unknown customer when create order" do
       ol=ImOrder::OrderLine.new("9782824711560",0,"EUR")
       @order=ImOrder::Order.new(@order_uid,ImOrder::Customer.new(TEST_MISSING_CUSTOMER_UID),[ol])
-      r=@order.push(@auth)
+      assert_raises(ImOrder::UnknownCustomer) do
+        @order.push(@auth)
+      end
+    end
 
-      assert_equal false, r
-      refute_nil @order.error
-      assert_equal "UnknownCustomer", @order.error.code
+    should "invalid price when create order" do
+      ol=ImOrder::OrderLine.new("9782824711560",1999,"EUR")
+      @order=ImOrder::Order.new(@order_uid,ImOrder::Customer.new(@customer_uid),[ol])
+      assert_raises(ImOrder::SellInvalidPrice) do
+        @order.push(@auth)
+      end
     end
 
     should "create order" do
@@ -84,10 +106,9 @@ class TestImOnix < MiniTest::Test
 
     should "download list from missing order" do
       @order=ImOrder::Order.new(TEST_MISSING_ORDER_UID)
-      r=@order.download_list(@auth)
-      assert_equal false, r
-      refute_nil @order.error
-      assert_equal "UnknownOrder", @order.error.code
+      assert_raises(ImOrder::UnknownOrder) do
+        @order.download_list(@auth)
+      end
     end
 
     should "download list from order" do

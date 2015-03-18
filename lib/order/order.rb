@@ -3,10 +3,9 @@ require 'order/auth'
 require 'order/customer'
 require 'order/order_line'
 require 'order/download'
+require 'order/error'
 
 module ImOrder
-  class IncompleteOrder < StandardError
-  end
 
   class Order
     include DownloadList
@@ -42,8 +41,9 @@ module ImOrder
         resp=client.request(parameters)
 
         if resp.type=="Error"
+          ex=ImOrder.const_get(resp.code)
           @error=resp
-          false
+          raise ex, resp.message
         else
           if resp.type=="Warning"
             @warning=resp
@@ -69,8 +69,9 @@ module ImOrder
       parameters["order_uid"]=@uid
       resp=client.request(parameters)
       if resp.type=="Error"
+        ex=ImOrder.const_get(resp.code)
         @error=resp
-        false
+        raise ex, resp.message
       else
         if resp.type=="Warning"
           @warning=resp
