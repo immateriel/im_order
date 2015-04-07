@@ -23,6 +23,9 @@ module ImOrder
   class SellInvalidPrice < StandardError
   end
 
+  class RestrictedCountry < StandardError
+  end
+
   class SellForbidden < StandardError
   end
 

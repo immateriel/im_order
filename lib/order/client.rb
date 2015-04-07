@@ -47,6 +47,10 @@ module ImOrder
       @message=self.result.text
     end
 
+    def exception
+      ImOrder.const_get(@code)
+    end
+
     def to_s
       "ImOrder::ResponseError:#{@code}: #{@message}"
     end
@@ -64,6 +68,18 @@ module ImOrder
 
     def to_s
       "ImOrder::ResponseError:#{@code}: #{@id} #{@message}"
+    end
+  end
+
+  def self.parse_response(body)
+    r=Response.new(body)
+    case r.type
+      when "Error"
+        ResponseError.new(body)
+      when "Warning"
+        ResponseWarning.new(body)
+      else
+        r
     end
   end
 
@@ -100,18 +116,11 @@ module ImOrder
       response = http.request(request)
 
       if response.code.to_i/200 == 1
-        r=Response.new(response.body)
-        case r.type
-          when "Error"
-            ResponseError.new(response.body)
-          when "Warning"
-            ResponseWarning.new(response.body)
-          else
-            r
-        end
+        ImOrder.parse_response(response.body)
       else
         raise ServerError, response.code
       end
     end
   end
+
 end

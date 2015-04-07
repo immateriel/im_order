@@ -40,24 +40,21 @@ module ImOrder
         end
         resp=client.request(parameters)
 
-        if resp.type=="Error"
-          ex=ImOrder.const_get(resp.code)
-          @error=resp
-          raise ex, resp.message
-        else
-          if resp.type=="Warning"
+        case resp
+          when ResponseError
+            @error=resp
+            raise resp.exception, resp.message
+          when ResponseWarning
             @warning=resp
             @id=resp.result["id"]
             false
-          else
+          when Response
             @id=resp.result["id"]
             @amount=resp.result["amount"]
             @tax=resp.result["tax"]
             @download_key=resp.result["download_key"]
             true
-          end
         end
-
       else
         raise IncompleteOrder
       end
@@ -68,18 +65,16 @@ module ImOrder
       parameters=auth.to_params
       parameters["order_uid"]=@uid
       resp=client.request(parameters)
-      if resp.type=="Error"
-        ex=ImOrder.const_get(resp.code)
-        @error=resp
-        raise ex, resp.message
-      else
-        if resp.type=="Warning"
+      case resp
+        when ResponseError
+          @error=resp
+          raise resp.exception, resp.message
+        when ResponseWarning
           @warning=resp
           false
-        else
+        when Response
           @downloads=to_downloads(resp)
           true
-        end
       end
     end
 

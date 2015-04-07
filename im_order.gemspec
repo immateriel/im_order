@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "im_order"
-  s.version = "1.0.0"
+  s.version = "1.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["julbouln"]
-  s.date = "2015-03-18"
+  s.date = "2015-04-07"
   s.description = "immat\u{e9}riel.fr order web-services helper"
   s.email = "jboulnois@immateriel.fr"
   s.extra_rdoc_files = [
