@@ -14,6 +14,9 @@ module ImOrder
   class DataMissing < StandardError
   end
 
+  class InvalidCustomerEmail < StandardError
+  end
+
   class UnknownCustomer < StandardError
   end
 
