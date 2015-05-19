@@ -9,7 +9,7 @@ module ImOrder
 
   class Order
     include DownloadList
-    attr_accessor :uid, :id, :amount, :tax, :download_key, :downloads, :error, :warning
+    attr_accessor :uid, :id, :amount, :tax, :download_key, :downloads, :voidable, :error, :warning
 
     def initialize(uid, customer=nil, order_lines=nil)
       @uid=uid
@@ -57,6 +57,52 @@ module ImOrder
         end
       else
         raise IncompleteOrder
+      end
+    end
+
+    def voidable(auth)
+      if @customer and @uid
+        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/voidable_order")
+        parameters=auth.to_params
+        parameters["order_uid"]=@uid
+        parameters["customer_uid"]=@customer.uid
+        resp=client.request(parameters)
+        case resp
+          when ResponseError
+            @error=resp
+            raise resp.exception, resp.message
+          when ResponseWarning
+            @warning=resp
+            false
+          when Response
+            case resp.result["type"]
+              when "OrderVoidable"
+                @voidable=true
+              when "OrderNotVoidable"
+                @voidable=false
+            end
+            true
+        end
+      end
+    end
+
+    def cancel(auth)
+      if @customer and @uid
+        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/cancel_order")
+        parameters=auth.to_params
+        parameters["order_uid"]=@uid
+        parameters["customer_uid"]=@customer.uid
+        resp=client.request(parameters)
+        case resp
+          when ResponseError
+            @error=resp
+            raise resp.exception, resp.message
+          when ResponseWarning
+            @warning=resp
+            false
+          when Response
+            true
+        end
       end
     end
 
