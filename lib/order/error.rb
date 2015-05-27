@@ -42,5 +42,7 @@ module ImOrder
   class IncompleteOrder < StandardError
   end
 
+  class NotVoidable < StandardError
+  end
 
 end
