@@ -118,6 +118,18 @@ class TestImOnix < MiniTest::Test
       refute_nil @order.downloads
     end
 
+    should "voidable order" do
+      @order=ImOrder::Order.new(@order_uid,ImOrder::Customer.new(@customer_uid))
+      r=@order.voidable(@auth)
+      assert_equal true, r
+    end
+
+    should "void order" do
+      @order=ImOrder::Order.new(@order_uid,ImOrder::Customer.new(@customer_uid))
+      r=@order.cancel(@auth)
+      assert_equal true, r
+    end
+
   end
 
 
