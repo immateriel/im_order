@@ -12,7 +12,7 @@ module ImOrder
     def to_params
       params={"price"=>@price,"currency"=>@currency,"qty"=>@qty}
 
-      if special_code
+      if @special_code
         params["special_code"]=@special_code
       end
 
