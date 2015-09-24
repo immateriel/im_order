@@ -45,4 +45,11 @@ module ImOrder
   class NotVoidable < StandardError
   end
 
+  ### PNB
+  class UnknownOrderLine < StandardError
+  end
+
+  class LoanAlreadyExists < StandardError
+  end
+
 end
