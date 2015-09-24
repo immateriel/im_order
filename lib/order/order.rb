@@ -31,7 +31,7 @@ module ImOrder
 
     def push(auth)
       if @customer and @order_lines and @order_lines.length > 0
-        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/push_order")
+        client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/push_order")
         parameters=auth.to_params
         parameters=parameters.merge(self.to_params)
         parameters["order_lines"]={}
@@ -62,7 +62,7 @@ module ImOrder
 
     def voidable(auth)
       if @customer and @uid
-        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/voidable_order")
+        client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/voidable_order")
         parameters=auth.to_params
         parameters["order_uid"]=@uid
         parameters["customer_uid"]=@customer.uid
@@ -88,7 +88,7 @@ module ImOrder
 
     def cancel(auth)
       if @customer and @uid
-        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/cancel_order")
+        client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/cancel_order")
         parameters=auth.to_params
         parameters["order_uid"]=@uid
         parameters["customer_uid"]=@customer.uid
@@ -107,7 +107,7 @@ module ImOrder
     end
 
     def download_list(auth)
-      client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/order_download_list")
+      client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/order_download_list")
       parameters=auth.to_params
       parameters["order_uid"]=@uid
       resp=client.request(parameters)

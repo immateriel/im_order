@@ -84,6 +84,11 @@ module ImOrder
   end
 
   class Client
+
+    def self.domain
+      "ws.immateriel.fr"
+    end
+
     def initialize(url)
       @url=url
     end

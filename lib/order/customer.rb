@@ -29,7 +29,7 @@ module ImOrder
 
     def push(auth)
       if @email and @firstname and @lastname and @country
-        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/push_customer")
+        client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/push_customer")
 
         parameters=auth.to_params
         parameters=parameters.merge(self.to_params)
@@ -56,7 +56,7 @@ module ImOrder
     end
 
     def download_list(auth)
-      client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/customer_download_list")
+      client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/customer_download_list")
       parameters=auth.to_params
       parameters["customer_uid"]=@uid
       resp=client.request(parameters)

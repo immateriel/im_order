@@ -29,7 +29,7 @@ module ImOrder
 
     def push(auth)
       if @customer and @order_lines and @order_lines.length > 0
-        client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/push_order_pnb")
+        client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/push_order_pnb")
         parameters=auth.to_params
         parameters=parameters.merge(self.to_params)
         parameters["order_lines"]={}

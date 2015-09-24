@@ -23,7 +23,7 @@ module ImOrder
     end
 
     def push_loan(auth,loan_uid,medium=nil)
-      client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/push_loan_pnb")
+      client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/push_loan_pnb")
       parameters=auth.to_params
       parameters["order_line_uid"]=@order_line_uid
       parameters["loan_uid"]=loan_uid
@@ -44,7 +44,7 @@ module ImOrder
 
     # take only one line, OK for testing purpose
     def get_status(auth)
-      client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/get_order_pnb")
+      client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/get_order_pnb")
       parameters=auth.to_params
       parameters["order_line_uids"]=[@order_line_uid]
       resp=client.request(parameters)
