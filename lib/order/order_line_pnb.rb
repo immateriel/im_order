@@ -1,7 +1,7 @@
 module ImOrder
   class OrderLinePnb
     attr_accessor :ean,:downloads,:status
-    def initialize(ean,price,currency,order_line_uid,qty=1,special_code=nil)
+    def initialize(order_line_uid,ean=nil,price=nil,currency=nil,qty=1,special_code=nil)
       @ean=ean
       @price=price
       @currency=currency
@@ -22,7 +22,7 @@ module ImOrder
       params
     end
 
-    def push_loan(auth,loan_uid,medium)
+    def push_loan(auth,loan_uid,medium=nil)
       client=ImOrder::Client.new("https://ws.immateriel.fr/fr/web_service/push_loan_pnb")
       parameters=auth.to_params
       parameters["order_line_uid"]=@order_line_uid

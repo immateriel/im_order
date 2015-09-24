@@ -1,25 +1,14 @@
 # coding: utf-8
-#require 'helper'
 
-#require 'test/unit'
 require 'minitest/autorun'
 require 'shoulda'
 
 require 'im_order'
 require 'pp'
 
-TEST_API_KEY="xxx"
-TEST_RESELLER_ID="xxx"
-TEST_RESELLER_GENCOD=nil
+require 'test_constants'
 
-TEST_CUSTOMER_UID="IMORDERCUST#{Time.now.to_i}"
-TEST_ORDER_UID="IMORDERORD#{Time.now.to_i}"
-
-TEST_MISSING_CUSTOMER_UID="IMORDERCUSTMISSING"
-TEST_MISSING_ORDER_UID="IMORDERMISSING"
-
-
-class TestImOnix < MiniTest::Test
+class TestImOrder < MiniTest::Test
   i_suck_and_my_tests_are_order_dependent!
 
   context "wrong auth" do
