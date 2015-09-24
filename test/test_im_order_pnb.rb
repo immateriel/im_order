@@ -27,16 +27,8 @@ class TestImOrderPnb < MiniTest::Test
       end
     end
 
-    should "invalid price when create order" do
-      ol=ImOrder::OrderLinePnb.new(@order_line_uid,"9782820520579",100,"EUR")
-      @order=ImOrder::OrderPnb.new(@order_uid,[ol])
-      assert_raises(ImOrder::SellInvalidPrice) do
-        @order.push(@auth)
-      end
-    end
-
     should "create order" do
-      ol=ImOrder::OrderLinePnb.new(@order_line_uid,"9782820520579",200,"EUR")
+      ol=ImOrder::OrderLinePnb.new(@order_line_uid,"3612225462197",200,"EUR")
       @order=ImOrder::OrderPnb.new(@order_uid,[ol])
       r=@order.push(@auth)
 
