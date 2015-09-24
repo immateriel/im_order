@@ -52,4 +52,7 @@ module ImOrder
   class LoanAlreadyExists < StandardError
   end
 
+  class LoanLimitReached < StandardError
+  end
+
 end

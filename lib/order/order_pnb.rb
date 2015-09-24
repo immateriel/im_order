@@ -9,7 +9,7 @@ module ImOrder
 
   class OrderPnb
     include DownloadList
-    attr_accessor :uid, :id, :amount, :tax, :download_key, :downloads, :voidable, :error, :warning
+    attr_accessor :uid, :id, :amount, :tax, :download_key, :voidable, :error, :warning
 
     def initialize(uid, order_lines=nil)
       @uid=uid
@@ -21,7 +21,6 @@ module ImOrder
       @download_key=nil
       @error=nil
       @warning=nil
-      @downloads=nil
     end
 
     def to_params
