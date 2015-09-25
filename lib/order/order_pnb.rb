@@ -1,14 +1,12 @@
 require 'order/client'
 require 'order/auth'
-require 'order/customer'
-require 'order/order_line'
+require 'order/order_line_pnb'
 require 'order/download'
 require 'order/error'
 
 module ImOrder
 
   class OrderPnb
-    include DownloadList
     attr_accessor :uid, :id, :amount, :tax, :download_key, :voidable, :error, :warning
 
     def initialize(uid, order_lines=nil)
@@ -28,7 +26,7 @@ module ImOrder
     end
 
     def push(auth)
-      if @customer and @order_lines and @order_lines.length > 0
+      if @order_lines and @order_lines.length > 0
         client=ImOrder::Client.new("https://#{ImOrder::Client.domain}/fr/web_service/push_order_pnb")
         parameters=auth.to_params
         parameters=parameters.merge(self.to_params)

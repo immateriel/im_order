@@ -50,13 +50,18 @@ class TestImOrderPnb < MiniTest::Test
       @order_line=ImOrder::OrderLinePnb.new(@order_line_uid)
       r=@order_line.push_loan(@auth,@loan_uid)
       assert_equal true, r
+      refute_nil @order_line.downloads
+      @order_line.downloads.each do |d|
+        pp d
+      end
     end
 
-    should "get_status" do
+    should "pushed get status" do
       @order_line=ImOrder::OrderLinePnb.new(@order_line_uid)
       r=@order_line.get_status(@auth)
       assert_equal true, r
-      assert_equal 1,@order_line.status[:loan_current]
+      pp @order_line.status
+      assert_equal 1,@order_line.status[:current_loans]
     end
 
   end

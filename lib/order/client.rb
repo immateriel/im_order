@@ -86,7 +86,8 @@ module ImOrder
   class Client
 
     def self.domain
-      "ws.immateriel.fr"
+#      "ws.immateriel.fr"
+      "backstage-trunk.immateriel.fr"
     end
 
     def initialize(url)
