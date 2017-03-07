@@ -52,7 +52,8 @@ class TestImOrderPnb < MiniTest::Test
       assert_equal true, r
       refute_nil @order_line.downloads
       @order_line.downloads.each do |d|
-        pp d
+        dls = d.last
+        puts "Download link for #{dls.first.ean} : #{dls.first.url}"
       end
     end
 
@@ -60,8 +61,8 @@ class TestImOrderPnb < MiniTest::Test
       @order_line=ImOrder::OrderLinePnb.new(@order_line_uid)
       r=@order_line.get_status(@auth)
       assert_equal true, r
-      pp @order_line.status
-      assert_equal 1,@order_line.status[:current_loans]
+      assert_equal 0,@order_line.status[:current_loans]
+      puts "Order status : #{@order_line.status}"
     end
 
   end

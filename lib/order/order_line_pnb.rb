@@ -57,11 +57,11 @@ module ImOrder
           @warning=resp
           false
         when Response
-          pp resp
           resp.result.children.each do |pr|
             if pr.element? and pr["order_line_uid"]==@order_line_uid
               @status[:total_loans]=pr["total_loans"].to_i
               @status[:current_loans]=pr["current_loans"].to_i
+              @status[:remaining_loans]=pr["remaining_loans"].to_i
             end
           end
           true
