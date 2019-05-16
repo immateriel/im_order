@@ -42,7 +42,7 @@ module ImOrder
   class IncompleteOrder < StandardError
   end
 
-  class NotVoidable < StandardError
+  class OrderNotVoidable < StandardError
   end
 
   ### PNB
