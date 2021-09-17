@@ -1,1 +1,3 @@
-http://nu.immateriel.fr/documentation/index.php/Service_Web_revendeur
+Gem ruby pour le passage de commandes sur la plate-forme immatériel.fr
+
+Voir https://github.com/immateriel/im_order/wiki/Service-web-revendeur
