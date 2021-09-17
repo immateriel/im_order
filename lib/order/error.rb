@@ -34,6 +34,7 @@ module ImOrder
 
   class InternalError < StandardError
   end
+
   ###
 
   class IncompleteCustomer < StandardError
